@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'test') {
   app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 }
 
-db.run
+db.run(
   'INSERT INTO users (email, password) VALUES (?, ?)',
   'user@example.com',
   'superlonghashedpasswordthatwewillseehowtohashinthenextsection',
@@ -39,7 +39,6 @@ db.run
     // returnera korrekt svar
   }
 );
-
 app.use('/', index);
 app.use('/hello', hello);
 
