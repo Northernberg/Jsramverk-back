@@ -10,7 +10,7 @@ const hello = require('./routes/hello');
 const sqlite3 = require('sqlite3').verbose();
 const db = new sqlite3.Database('./db/texts.sqlite');
 
-const port = 1337;
+const port = 8333;
 
 app.use(cors());
 
