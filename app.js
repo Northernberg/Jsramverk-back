@@ -3,16 +3,19 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
+require('dotenv').config();
 
 const index = require('./routes/index');
 const hello = require('./routes/hello');
-
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/texts.sqlite');
+const reports = require('./routes/reports');
+const register = require('./routes/register');
+const login = require('./routes/login');
 
 const port = 8333;
 
 app.use(cors());
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 // This is middleware called for all routes.
 // Middleware takes three parameters.
@@ -22,25 +25,28 @@ app.use((req, res, next) => {
   next();
 });
 
+function checkToken(req, res, next) {
+  const token = req.headers['x-access-token'];
+
+  jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
+    if (err) {
+      // send error response
+    }
+
+    // Valid token send on the request
+    next();
+  });
+}
+
 if (process.env.NODE_ENV !== 'test') {
   // use morgan to log at command line
   app.use(morgan('combined')); // 'combined' outputs the Apache style LOGs
 }
-
-db.run(
-  'INSERT INTO users (email, password) VALUES (?, ?)',
-  'user@example.com',
-  'superlonghashedpasswordthatwewillseehowtohashinthenextsection',
-  err => {
-    if (err) {
-      // returnera error
-    }
-
-    // returnera korrekt svar
-  }
-);
 app.use('/', index);
 app.use('/hello', hello);
+app.use('/reports', reports);
+app.use('/register', register);
+app.use('/login', login);
 
 app.get('/user', (req, res) => {
   res.json({
@@ -87,7 +93,6 @@ app.use((err, req, res, next) => {
     ],
   });
 });
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 // Start up server
 app.listen(port, () => console.log(`Example API listening on port ${port}!`));
