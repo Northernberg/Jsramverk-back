@@ -9,7 +9,7 @@ function checkToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
     if (err) {
-      res.status(422).json('Invalid JWT token.');
+      res.status(401).json('Invalid JWT token.');
     }
 
     // Valid token send on the request
