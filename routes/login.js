@@ -21,7 +21,7 @@ router.post(
         req.body.email,
         (err, row) => {
           if (err) {
-            res.status(422).send('Wrong email or password');
+            return res.status(422).send('Wrong email or password');
           } else {
             bcrypt.compare(req.body.password, row.password, function(
               err,
