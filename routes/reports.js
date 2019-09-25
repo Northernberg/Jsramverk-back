@@ -30,7 +30,7 @@ router.get('/', function(req, res) {
 router.get('/week/:id', function(req, res) {
   db.get('SELECT * FROM reports where week = ?', req.params.id, (err, row) => {
     if (err) {
-      res.status(401).json('Wrong email or password');
+      res.status(401).send(err);
     } else {
       res.status(200).json(row);
     }
