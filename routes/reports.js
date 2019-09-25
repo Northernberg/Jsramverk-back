@@ -10,10 +10,9 @@ function checkToken(req, res, next) {
   jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
     if (err) {
       res.status(401).json('Invalid JWT token.');
+    } else {
+      next();
     }
-
-    // Valid token send on the request
-    next();
   });
 }
 
