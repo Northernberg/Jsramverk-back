@@ -9,7 +9,7 @@ function checkToken(req, res, next) {
 
   jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
     if (err) {
-      res.status(401).json('Invalid JWT token.');
+      return res.status(401).json('Invalid JWT token.');
     }
 
     // Valid token send on the request
@@ -30,9 +30,10 @@ router.get('/', function(req, res) {
 router.get('/week/:id', function(req, res) {
   db.get('SELECT * FROM reports where week = ?', req.params.id, (err, row) => {
     if (err || row == null) {
-      res.status(401).json(err);
+      res.status(404).json(err);
+    } else {
+      res.status(200).json(row);
     }
-    res.status(200).json(row);
   });
 });
 
