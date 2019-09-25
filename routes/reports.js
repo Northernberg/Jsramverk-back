@@ -47,9 +47,9 @@ router.post(
       req.body.data,
       err => {
         if (err) {
-          res.status(401).send(err.message);
+          res.status(401).send(err);
         }
-        res.status(201).send();
+        res.status(201).send('Report created');
         // returnera korrekt svar
       }
     );
@@ -68,7 +68,7 @@ router.post(
         if (err) {
           res.status(401).send();
         } else {
-          res.status(200).send('Updated report');
+          res.status(200).json();
         }
       }
     );

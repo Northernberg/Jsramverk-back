@@ -48,30 +48,6 @@ app.use('/reports', reports);
 app.use('/register', register);
 app.use('/login', login);
 
-app.get('/user', (req, res) => {
-  res.json({
-    data: {
-      msg: 'Got a GET request',
-    },
-  });
-});
-
-app.post('/user', (req, res) => {
-  res.status(201).json({
-    data: {
-      msg: 'Got a POST request',
-    },
-  });
-});
-
-app.put('/user', (req, res) => {
-  res.status(204).send();
-});
-
-app.delete('/user', (req, res) => {
-  res.status(204).send();
-});
-
 app.use((req, res, next) => {
   var err = new Error('Not Found');
   err.status = 404;
