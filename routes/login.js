@@ -14,7 +14,7 @@ router.post('/', [check('email').isEmail()], (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   } else {
     db.get(
-      'SELECT * FROM USERS WHERE email = ?',
+      'SELECT * FROM users WHERE email = ?',
       req.body.email,
       (err, row) => {
         if (err) {
