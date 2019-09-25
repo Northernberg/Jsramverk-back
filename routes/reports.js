@@ -47,9 +47,9 @@ router.post(
       req.body.data,
       err => {
         if (err) {
-          res.status(401).send(err);
+          return res.status(401).json(err);
         }
-        res.status(201).send('Report created');
+        res.status(201).json('Report created');
         // returnera korrekt svar
       }
     );
