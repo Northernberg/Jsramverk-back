@@ -1,78 +1,69 @@
 var express = require('express');
 var router = express.Router();
 const jwt = require('jsonwebtoken');
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./db/texts.sqlite');
+const db = require('../database.js');
 
 function checkToken(req, res, next) {
-  const token = req.headers['x-access-token'];
+    const token = req.headers['x-access-token'];
 
-  jwt.verify(token, process.env.JWT_SECRET, function(err, decoded) {
-    if (err) {
-      return res.status(401).json('Invalid JWT token.');
-    }
-
-    // Valid token send on the request
-    next();
-  });
+    jwt.verify(token, process.env.JWT_SECRET, function(err) {
+        if (err) {
+            return res.status(401).json('Invalid JWT token.');
+        }
+        next();
+    });
 }
 
-router.get('/', function(req, res) {
-  const data = {
-    data: {
-      msg: 'Report page',
-    },
-  };
-
-  res.json(data);
-});
-
 router.get('/week/:id', function(req, res) {
-  db.get('SELECT * FROM reports where week = ?', req.params.id, (err, row) => {
-    if (err || row == null) {
-      res.status(404).json(err);
-    } else {
-      res.status(200).json(row);
-    }
-  });
+    db.get(
+        'SELECT * FROM reports where week = ?',
+        req.params.id,
+        (err, row) => {
+            if (err || row == null) {
+                return res.status(404).json(err);
+            } else {
+                res.status(200).json(row);
+            }
+        }
+    );
 });
 
 router.post(
-  '/',
-  (req, res, next) => checkToken(req, res, next),
-  (req, res) => {
-    db.run(
-      'INSERT INTO reports (week, data) VALUES (?, ?)',
-      req.body.week,
-      req.body.data,
-      err => {
-        if (err) {
-          return res.status(401).json(err);
-        }
-        res.status(201).json('Report created');
-        // returnera korrekt svar
-      }
-    );
-  }
+    '/',
+    (req, res, next) => checkToken(req, res, next),
+    (req, res) => {
+        db.run(
+            'INSERT INTO reports (week, data) VALUES (?, ?)',
+            req.body.week,
+            req.body.data,
+            err => {
+                if (err) {
+                    return res.status(401).json(err);
+                } else {
+                    res.status(201).json('Report created');
+                }
+            }
+        );
+    }
 );
 
 router.post(
-  '/update',
-  (req, res, next) => checkToken(req, res, next),
-  (req, res) => {
-    db.run(
-      'UPDATE reports SET data = ? WHERE week = ?',
-      req.body.data,
-      req.body.week,
-      err => {
-        if (err) {
-          res.status(401).send();
-        } else {
-          res.status(200).json();
-        }
-      }
-    );
-  }
+    '/update',
+    (req, res, next) => checkToken(req, res, next),
+    (req, res) => {
+        db.run(
+            'UPDATE reports SET data = ? WHERE week = ?',
+            req.body.data,
+            req.body.week,
+            err => {
+                if (err || !req.body.data || !req.body.week) {
+                    return res.status(401).json(err);
+                } else {
+                    res.status(200).json();
+                }
+            }
+        );
+    }
 );
 
 module.exports = router;

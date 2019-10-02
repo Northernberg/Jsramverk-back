@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "production": "NODE_ENV='production' node app.js"
+    "cleandb": "bash db/reset_test_db.bash",
+    "test": "nyc --reporter=html --reporter=text --reporter=clover mocha --timeout 10000",
+    "production": "NODE_ENV='production' node app.js",
+    "eslint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -18,5 +20,14 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^6.5.1",
+    "eslint-plugin-react": "^7.15.0",
+    "javascript-style-guide": "^1.0.1",
+    "mocha": "^6.2.0",
+    "nyc": "^14.1.1"
   }
 }
