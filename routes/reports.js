@@ -66,4 +66,18 @@ router.post(
     }
 );
 
+router.delete(
+    '/',
+    (req, res, next) => checkToken(req, res, next),
+    (req, res) => {
+        db.run('DELETE FROM reports WHERE week = ?', req.body.week, err => {
+            if (err || !req.body.week) {
+                return res.status(401).json(err);
+            } else {
+                res.status(200).json();
+            }
+        });
+    }
+);
+
 module.exports = router;
