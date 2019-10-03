@@ -40,7 +40,7 @@ router.post(
                 if (err) {
                     return res.status(401).json(err);
                 } else {
-                    res.status(201).json('Report created');
+                    res.status(201).json({ msg: 'Report created' });
                 }
             }
         );
