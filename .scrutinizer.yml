@@ -3,6 +3,7 @@ build:
         coverage:
             tests:
                 override:
+                    - npm run cleandb
                     - command: npm test
                       coverage:
                           file: coverage/clover.xml
