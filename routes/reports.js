@@ -74,7 +74,7 @@ router.delete(
             if (err || !req.body.week) {
                 return res.status(401).json(err);
             } else {
-                res.status(200).json();
+                res.status(200).json({ msg: 'deleted.' });
             }
         });
     }
