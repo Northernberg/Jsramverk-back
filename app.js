@@ -6,6 +6,7 @@ const cors = require('cors');
 const reports = require('./routes/reports');
 const register = require('./routes/register');
 const login = require('./routes/login');
+const chat = require('./routes/chat');
 
 const port = 8333;
 const app = express();
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV !== 'test') {
 app.use('/reports', reports);
 app.use('/register', register);
 app.use('/login', login);
+app.use('/chat', chat);
 
 app.use((req, res, next) => {
     var err = new Error('Not Found');
