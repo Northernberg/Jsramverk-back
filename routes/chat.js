@@ -7,16 +7,17 @@ const url = 'mongodb://localhost:27017';
 
 const dbName = 'chat';
 
-async function findInCollection(search, projection, limit) {
+async function findInCollection(search, projection, sort, limit) {
     const client = await MongoClient.connect(url, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
     const db = await client.db(dbName);
-    const col = await db.collection('crowd');
+    const col = await db.collection('chatHistory');
     const res = await col
         .find(search)
         .project(projection)
+        .sort(sort)
         .limit(limit)
         .toArray();
 
@@ -37,7 +38,7 @@ async function insertInCollection(message) {
 }
 
 router.get('/', (req, res) => {
-    findInCollection({}, {}, 20)
+    findInCollection({}, {}, { id: -1 }, 20)
         .then(result => {
             return res.status(200).json(result);
         })
