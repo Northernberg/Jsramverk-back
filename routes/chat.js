@@ -38,7 +38,7 @@ async function insertInCollection(message) {
 }
 
 router.get('/', (req, res) => {
-    findInCollection({}, {}, { id: -1 }, 20)
+    findInCollection({}, {}, { _id: -1 }, 20)
         .then(result => {
             return res.status(200).json(result);
         })
